@@ -1,5 +1,7 @@
+//not sure how to make this work without using these global variables and couldn't use var not sure why
 let zLocation;
-
+let weatherJson;
+let locDesc = [];
 function  buttonClicked(){
     zLocation = getLocation();
     //this log is going before the variable is propagated
@@ -8,6 +10,12 @@ function  buttonClicked(){
         //console.log(zLocation);
         getLocalWeather();
          }, 500);
+    setTimeout(function(){
+        //console.log(zLocation);
+        propagateData();
+    }, 1000);
+
+
 }
 
 function getLocation(){
@@ -15,7 +23,19 @@ function getLocation(){
     fetch (url + document.getElementById("zCode").value)
         .then(data => data.json())
         .then(data=>{
-            zLocation = data[0].Key
+            //get key for use with other api
+            zLocation = data[0].Key;
+            //get all other data
+            locDesc[0] = data[0].LocalizedName;
+            locDesc[1] = data[0].AdministrativeArea.ID;
+            locDesc[2] = data[0].PrimaryPostalCode;
+            locDesc[3] = data[0].Country.ID;
+            locDesc[4] = data[0].SupplementalAdminAreas[0].LocalizedName;
+            locDesc[5] = data[0].TimeZone.Code;
+            locDesc[6] = data[0].GeoPosition.Longitude;
+            locDesc[7] = data[0].GeoPosition.Latitude;
+            locDesc[8] = data[0].GeoPosition.Elevation.Imperial.Value;
+            locDesc[9] = data[0].GeoPosition.Elevation.Metric.Value;
             //console.log(zLocation);
         })
     return zLocation;
@@ -27,6 +47,26 @@ function getLocalWeather(){
     fetch (url + zLocation +apiKey)
         .then(data => data.json())
         .then(data=> {
-            console.log(data);
+            weatherJson = data[0];
+            locDesc[10] = weatherJson.LocalObservationDateTime;
+            console.log(weatherJson);
         })
+}
+
+function propagateData(){
+    //location data
+    document.getElementById("location").innerHTML = locDesc[0] + ", " + locDesc[1] + " " + locDesc[2] + ", " + locDesc[3];
+    document.getElementById("locationData1").innerHTML = "County: " + locDesc[4] + " Current time: " + locDesc[10] + " " + locDesc[5];
+    document.getElementById("locationData2").innerHTML = "Longitude: " + locDesc[6] + " Latitude: " + locDesc[7];
+    document.getElementById("locationData3").innerHTML = locDesc[0] + " is " + locDesc[8] + " feet or " + locDesc[9] + " meters above sea level!";
+
+    //weather data
+    document.getElementById("weatherDesc").innerHTML = weatherJson.WeatherText;
+    document.getElementById("tempC").innerHTML = weatherJson.Temperature.Metric.Value;
+    document.getElementById("tempF").innerHTML = weatherJson.Temperature.Imperial.Value;
+
+    //test data
+/*    for (i in locDesc) {
+        console.log(locDesc[i])
+    }*/
 }
