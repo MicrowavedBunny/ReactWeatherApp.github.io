@@ -7,30 +7,38 @@
 let zLocation;
 let weatherJson;
 let locDesc = [];
+let zCode;
+let infoGathered;
+let zForm;
 
-let infoGathered = document.getElementById("gatheredInfo");
-
-function  buttonClicked(){
-    zLocation = getLocation();
-    //this log is going before the variable is propagated
-    //settimeout is they only way I know how to fix this im sure there is a better way but idk one
-    setTimeout(function(){
-        //console.log(zLocation);
-        getLocalWeather();
-         }, 500);
-    setTimeout(function(){
-        //console.log(zLocation);
-        propagateData();
-        let zForm = document.getElementById("firstBox");
-        let infoGathered = document.getElementById("gatheredInfo");
-        zForm.style.display = 'none';
-        infoGathered.style.display = 'block';
-    }, 1000);
+function  buttonClicked() {
+    //get zCode after the page has loaded fully or it won't work.
+    zCode =document.getElementById("zCode");
+    //check if zip code is valid length
+    if (zCode.value.length !== 5) {
+        alert("Please enter a valid USA postal code!");
+    } else {
+        zLocation = getLocation();
+        //this log is going before the variable is propagated
+        //settimeout is they only way I know how to fix this im sure there is a better way but idk one
+        setTimeout(function () {
+            //console.log(zLocation);
+            getLocalWeather();
+        }, 500);
+        setTimeout(function () {
+            //console.log(zLocation);
+            propagateData();
+            zForm = document.getElementById("firstBox");
+            infoGathered = document.getElementById("gatheredInfo");
+            zForm.style.display = 'none';
+            infoGathered.style.display = 'block';
+        }, 1000);
+    }
 }
 
 function getLocation(){
     const url='https://dataservice.accuweather.com/locations/v1/postalcodes/search?apikey=RDxZA4liGfAGEATWpa60K6bdQjCGhlLW&q=';
-    fetch (url + document.getElementById("zCode").value)
+    fetch (url + zCode.value)
         .then(data => data.json())
         .then(data=>{
             //get key for use with other api
