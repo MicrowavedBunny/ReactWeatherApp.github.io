@@ -10,12 +10,16 @@
     <title>MicrowavedBunny's weather app</title>
 </head>
 <body>
-    <form>
+
+<div id="firstBox">
+    <form id="zForm">
         <label for="zCode">Enter your zip code:</label><br>
         <input type="number" id="zCode" name="zCode"><br>
-        <input type="button" onclick="buttonClicked()" value="Submit">
+        <input type="button" id="subButton" onclick="buttonClicked()" value="Submit">
     </form>
+</div>
 
+<div id="gatheredInfo" style="display: none">
     <h1 id="location"></h1>
     <h2 id="locationData1"></h2>
     <h3 id="locationData2"></h3>
@@ -35,6 +39,8 @@
             <td id="tempC"></td>
         </tr>
     </table>
+
+</div>
 
 </body>
 </html>

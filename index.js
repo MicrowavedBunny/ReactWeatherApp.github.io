@@ -1,7 +1,15 @@
+
+//TODO: 'add check if us and if valid zip code' 'limit amount of digits inputted' 'add enter functionality'
+//implementation
+
+
 //not sure how to make this work without using these global variables and couldn't use var not sure why
 let zLocation;
 let weatherJson;
 let locDesc = [];
+
+let infoGathered = document.getElementById("gatheredInfo");
+
 function  buttonClicked(){
     zLocation = getLocation();
     //this log is going before the variable is propagated
@@ -13,9 +21,11 @@ function  buttonClicked(){
     setTimeout(function(){
         //console.log(zLocation);
         propagateData();
+        let zForm = document.getElementById("firstBox");
+        let infoGathered = document.getElementById("gatheredInfo");
+        zForm.style.display = 'none';
+        infoGathered.style.display = 'block';
     }, 1000);
-
-
 }
 
 function getLocation(){
